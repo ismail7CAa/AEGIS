@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crash-lab
+  namespace: aegis-lab
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: crash-lab
+
+  template:
+    metadata:
+      labels:
+        app: crash-lab
+
+    spec:
+      containers:
+        - name: crashing-app
+          image: busybox:1.36
+
+          command:
+            - sh
+            - -c
+            - |
+              echo "AEGIS simulated application failure"
+              exit 1
+
+
