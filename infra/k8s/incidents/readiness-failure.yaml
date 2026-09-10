@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readiness-lab
+  namespace: aegis-lab
+
+spec:
+  replicas: 1 
+
+  selector:
+    matchLabels:
+      app: readiness-lab  
+
+  template:
+    metadata:
+      labels:
+        app: readiness-lab  
+
+    spec:
+      containers:
+        - name: lab-api
+          image: aegis-lab-api:dev
+          imagePullPolicy: IfNotPresent
+          
+          ports:
+            - containerPort: 8000
+
+          readinessProbe:
+            httpGet:
+              path: /this-does-not-exist
+              port: 8000
+
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "20m"
+
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
