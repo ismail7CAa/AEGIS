@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oom-lab
+  namespace: aegis-lab
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: oom-lab
+
+  template:
+    metadata:
+      labels:
+        app: oom-lab
+
+    spec:
+      containers:
+        - name: memory-hog
+          image: python:3.12-slim
+
+          command:
+            - python
+            - -c
+            - |
+              import time
+
+              data = []
+
+              while True:
+                  data.append(bytearray(10 * 1024 * 1024))
+                  print(f"Allocated approximately {len(data) * 10} MB")
+                  time.sleep(0.2)
+
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
