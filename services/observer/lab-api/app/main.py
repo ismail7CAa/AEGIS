@@ -1,26 +1,32 @@
-from fastapi import FastAPI, Response
-import asyncio 
+import asyncio
 
-app = FastAPI(title="AGEGIS Failure Lab")
+from fastapi import FastAPI, Response
+
+app = FastAPI(title="AEGIS Failure Lab")
+
 
 @app.get("/health")
-def health():
-    return{"status": "alive"}
+def health() -> dict[str, str]:
+    return {"status": "alive"}
+
 
 @app.get("/ready")
-def ready():
-    return{"status": "ready"}
+def ready() -> dict[str, str]:
+    return {"status": "ready"}
+
 
 @app.get("/simulate/error")
-def simulate_error(response: Response):
+def simulate_error(response: Response) -> dict[str, str]:
     response.status_code = 500
+
     return {
         "status": "error",
         "message": "Simulated internal server error",
     }
 
+
 @app.get("/simulate/latency")
-async def simulate_latency(seconds: int = 3):
+async def simulate_latency(seconds: int = 3) -> dict[str, str | int]:
     await asyncio.sleep(seconds)
 
     return {
