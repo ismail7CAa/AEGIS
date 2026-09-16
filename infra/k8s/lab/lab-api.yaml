@@ -25,6 +25,7 @@ spec:
           imagePullPolicy: IfNotPresent
 
           ports:
+
             - containerPort: 8000
 
           resources:
@@ -63,5 +64,6 @@ spec:
     app: lab-api
 
   ports:
-    - port: 80
+    - name: http 
+      port: 80
       targetPort: 8000
