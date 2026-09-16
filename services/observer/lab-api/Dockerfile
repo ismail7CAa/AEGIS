@@ -4,7 +4,8 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir \
     fastapi \
-    uvicorn 
+    uvicorn \
+    prometheus-client
 
 COPY app /app/
 
