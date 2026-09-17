@@ -31,7 +31,26 @@ def main() -> None:
         incidents = detect_incidents(state)
 
         for incident in incidents:
+            current_logs = kube.get_pod_logs(
+                namespace=incident.namespace,
+                pod_name=incident.pod,
+                container= incident.container,
+                previous=False,
+            )
+
+            previous_logs = kube.get_pod_logs(
+                namespace=incident.namespace,
+                pod_name=incident.pod,
+                container= incident.container,
+                previous=True,
+            )
             print(incident.model_dump_json(indent = 2))
+
+            print("\nCurrent logs:")
+            print(current_logs)
+
+            print("\nPrevious logs:")
+            print(previous_logs)
 
             print("\nKubernetes Events:")
             for event in pod_events:
