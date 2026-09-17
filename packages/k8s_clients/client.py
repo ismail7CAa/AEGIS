@@ -23,3 +23,26 @@ class KubernetesClient:
     def list_events(self, namespace: str) -> list[Any]:
         result = self.core.list_namespaced_event(namespace)
         return cast(list[Any], result.items)
+
+    def get_pod_logs(
+            self,
+            namespace: str,
+            pod_name: str,
+            container_name: str,
+            *,
+            previous: bool = False,
+            tail_lines: int = 100,
+
+    )-> str | None:
+        try:
+            logs = self.core.read_namespaced_pod_log(
+                name=pod_name,
+                namespace=namespace,
+                container = container_name,
+                previous = previous,
+                tail_lines=tail_lines,
+                timestamps=True,
+            )
+            return str(logs)
+        except ApiException:
+            return None
